@@ -8,10 +8,6 @@ import plotly.express as px
 from models import BiLSTMModel, TransformerModel, StockPredictor
 import io
 
-# 初始化session_state，防止点击回弹
-if "show_report" not in st.session_state:
-    st.session_state.show_report = False
-
 st.set_page_config(
     page_title="股市预测模型对比 - BiLSTM vs Transformer vs ARIMA",
     page_icon="📈",
@@ -420,21 +416,10 @@ with main_container:
                             fig_hist.update_layout(title=f"{model_name} 残差分布", xaxis_title="残差值", yaxis_title="概率密度", template='plotly_dark', height=300)
                             st.plotly_chart(fig_hist, use_container_width=True)
 
-# ====================== 项目报告（修复回弹，稳定显示） ======================
+# ====================== 项目报告（直接显示，永远不弹，永远有内容） ======================
                 st.divider()
-                st.subheader("📄 项目报告 Project Report")
-                
-                # 用session_state保持状态，不回弹
-                def toggle_report():
-                    st.session_state.show_report = not st.session_state.show_report
-                
-                st.button("📋 打开/关闭完整项目报告", use_container_width=True, key="btn_report", on_click=toggle_report)
-                
-                # 状态保持，稳定显示
-                if st.session_state.show_report:
-                    with st.expander("项目报告", expanded=True):
-                        st.markdown("""
-# 📄 Project Report (Group Project)
+                st.header("📄 Project Report (Group Project)")
+                st.markdown("""
 ## Financial Time Series Prediction & Model Comparison
 
 ### 1. Problem Description
@@ -508,7 +493,6 @@ Our Personal Analysis: In this financial time series prediction task, we compare
 
 ✅ All project requirements are satisfied.
 """)
-
 # ================================================================================
 
                 st.header("💾 模型保存")
