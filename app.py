@@ -490,7 +490,7 @@ From the results:
 - **BiLSTM**: Good at capturing short-term trends, but trains slowly.
 - **Transformer**: Stronger long-range modeling, but needs more data.
 
-In most stock prediction cases, **BiLSTM or Transformer performs better** than ARIMA.
+In most stock prediction cases, ARIMA better than BiLSTM or Transformer performs 
 """)
 
 # 6. Personal Analysis
