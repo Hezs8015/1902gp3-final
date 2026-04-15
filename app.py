@@ -207,20 +207,74 @@ bilstm_layers = st.sidebar.slider("LSTM层数", min_value=1, max_value=4, value=
 if st.sidebar.checkbox("ℹ️ LSTM层数是什么？"):
     st.sidebar.info("层数越多，特征提取能力越强，但训练更慢")
 
+# ====================== Transformer 参数全部加解释 ======================
 st.sidebar.subheader("🤖 Transformer参数")
 trans_d_model = st.sidebar.slider("模型维度", min_value=32, max_value=256, value=128, step=32)
-trans_heads = st.sidebar.slider("注意力头数", min_value=2, max_value=16, value=8, step=2)
-trans_layers = st.sidebar.slider("编码器层数", min_value=1, max_value=6, value=2)
+if st.sidebar.checkbox("ℹ️ 模型维度是什么？"):
+    st.sidebar.info("""
+**模型维度 d_model**：特征向量的长度，控制模型表达能力。
+值越大，模型越强，但计算更慢。
+""")
 
+trans_heads = st.sidebar.slider("注意力头数", min_value=2, max_value=16, value=8, step=2)
+if st.sidebar.checkbox("ℹ️ 注意力头数是什么？"):
+    st.sidebar.info("""
+**注意力头数 nhead**：将特征分成多少组独立计算注意力。
+多头能捕捉不同类型的规律。
+""")
+
+trans_layers = st.sidebar.slider("编码器层数", min_value=1, max_value=6, value=2)
+if st.sidebar.checkbox("ℹ️ 编码器层数是什么？"):
+    st.sidebar.info("""
+**编码器层数**：堆叠多少层 Transformer 块。
+层数越深，模型越复杂，训练越慢。
+""")
+
+# ====================== ARIMA 参数全部加解释 ======================
 st.sidebar.subheader("📈 ARIMA参数")
 arma_p = st.sidebar.slider("AR阶数(p)", min_value=1, max_value=5, value=1)
-arma_d = st.sidebar.slider("差分阶数(d)", min_value=0, max_value=2, value=0)
-arma_q = st.sidebar.slider("MA阶数(q)", min_value=1, max_value=5, value=1)
+if st.sidebar.checkbox("ℹ️ AR阶数(p)是什么？"):
+    st.sidebar.info("""
+**AR(p) 自回归阶数**：用过去 p 天的数据直接预测当天。
+""")
 
+arma_d = st.sidebar.slider("差分阶数(d)", min_value=0, max_value=2, value=0)
+if st.sidebar.checkbox("ℹ️ 差分阶数(d)是什么？"):
+    st.sidebar.info("""
+**差分阶数 d**：对数据做几次差分使其平稳。
+股票通常 d=1 即可。
+""")
+
+arma_q = st.sidebar.slider("MA阶数(q)", min_value=1, max_value=5, value=1)
+if st.sidebar.checkbox("ℹ️ MA阶数(q)是什么？"):
+    st.sidebar.info("""
+**MA(q) 移动平均阶数**：用过去 q 天的误差修正预测。
+""")
+
+# ====================== 训练参数全部加解释 ======================
 st.sidebar.subheader("⚡ 训练参数")
 epochs = st.sidebar.slider("训练轮数", min_value=10, max_value=200, value=15, step=5)
+if st.sidebar.checkbox("ℹ️ 训练轮数是什么？"):
+    st.sidebar.info("""
+**训练轮数 Epochs**：整个数据集被模型完整学习多少遍。
+轮数太少欠拟合，太多过拟合。
+""")
+
 batch_size = st.sidebar.slider("批次大小", min_value=8, max_value=128, value=64, step=8)
+if st.sidebar.checkbox("ℹ️ 批次大小是什么？"):
+    st.sidebar.info("""
+**批次大小 Batch Size**：每次训练用多少条数据。
+越大越稳定，越占显存。
+""")
+
 learning_rate = st.sidebar.slider("学习率", min_value=0.0001, max_value=0.01, value=0.001, step=0.0001)
+if st.sidebar.checkbox("ℹ️ 学习率是什么？"):
+    st.sidebar.info("""
+**学习率 LR**：模型每次更新参数的步长。
+太大不收敛，太小训练太慢。
+""")
+
+# ======================================================================
 
 main_container = st.container()
 with main_container:
@@ -416,7 +470,7 @@ with main_container:
                             fig_hist.update_layout(title=f"{model_name} 残差分布", xaxis_title="残差值", yaxis_title="概率密度", template='plotly_dark', height=300)
                             st.plotly_chart(fig_hist, use_container_width=True)
 
-# ====================== 项目报告（直接显示，永远不弹，永远有内容） ======================
+# ====================== 项目报告（直接显示） ======================
                 st.divider()
                 st.header("📄 Project Report (Group Project)")
                 st.markdown("""
@@ -493,7 +547,7 @@ Our Personal Analysis: In this financial time series prediction task, we compare
 
 ✅ All project requirements are satisfied.
 """)
-# ================================================================================
+# ==================================================================
 
                 st.header("💾 模型保存")
                 model_name = st.text_input("模型名称", f"stock_model_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}")
