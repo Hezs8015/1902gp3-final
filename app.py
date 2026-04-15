@@ -171,6 +171,20 @@ if st.sidebar.button("🔍 查看模型原理", use_container_width=True):
     
     ---
     """)
+
+# ─────────────────────────────────────────────
+# 参考文献
+# ─────────────────────────────────────────────
+st.markdown("---")
+st.header("📖 References")
+
+st.markdown("""
+[1] Box, G. E. P., & Jenkins, G. M. (1970). *Time series analysis: Forecasting and control*. Holden-Day.
+
+[2] Schuster, M., & Paliwal, K. K. (1997). Bidirectional recurrent neural networks. *IEEE Transactions on Signal Processing, 45*, 2673–2681. https://doi.org/10.1109/78.650093
+
+[3] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). Attention is all you need. *Advances in Neural Information Processing Systems, 30*. https://arxiv.org/abs/1706.03762
+""")
 import streamlit as st
 
 st.set_page_config(
