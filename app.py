@@ -48,7 +48,6 @@ st.markdown("""
 st.markdown('<div class="main-header">📊 股市预测模型对比分析</div>', unsafe_allow_html=True)
 st.markdown('<div class="sub-header">BiLSTM vs Transformer vs ARIMA 模型性能比较</div>', unsafe_allow_html=True)
 
-# ====================== 模型介绍按钮（左侧最前面） ======================
 st.sidebar.header("📖 模型介绍")
 if st.sidebar.button("📘 模型介绍 Model Intro", use_container_width=True, key="btn_intro"):
     with st.expander("模型介绍", expanded=True):
@@ -145,8 +144,6 @@ BiLSTM 在此基础上**同时从正向和反向**处理序列：
 [3] Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). Attention is all you need. *Advances in Neural Information Processing Systems, 30*. https://arxiv.org/abs/1706.03762
 """)
 
-# ===========================================================================
-
 st.sidebar.header("📂 模型管理")
 if st.sidebar.checkbox("📥 加载已保存的模型"):
     st.sidebar.info("""
@@ -184,97 +181,59 @@ if not use_bilstm and not use_transformer and not use_arma:
 st.sidebar.subheader("🔧 模型参数")
 seq_length = st.sidebar.slider("序列长度", min_value=10, max_value=120, value=60, step=10)
 if st.sidebar.checkbox("ℹ️ 序列长度是什么？"):
-    st.sidebar.info("""
-**序列长度**：用过去多少天的数据来预测下一天。
-📌 示例：设置为60表示用过去60天的股价预测第61天
-""")
+    st.sidebar.info("用过去多少天的数据预测下一天")
 
 train_split = st.sidebar.slider("训练集比例", min_value=0.5, max_value=0.9, value=0.8, step=0.05)
 if st.sidebar.checkbox("ℹ️ 训练集比例是什么？"):
-    st.sidebar.info("""
-**训练集比例**：多少数据用于训练，剩余用于测试。
-📌 示例：0.8表示80%数据训练，20%数据测试
-""")
+    st.sidebar.info("用于训练的数据占比，剩余用于测试")
 
 st.sidebar.subheader("🧠 BiLSTM参数")
 bilstm_hidden = st.sidebar.slider("隐藏层大小", min_value=32, max_value=256, value=128, step=32)
 if st.sidebar.checkbox("ℹ️ 隐藏层大小是什么？"):
-    st.sidebar.info("""
-**隐藏层大小**：LSTM神经元的数量，决定模型的学习能力。
-""")
+    st.sidebar.info("LSTM内部神经元数量，决定模型学习能力")
 
 bilstm_layers = st.sidebar.slider("LSTM层数", min_value=1, max_value=4, value=2)
 if st.sidebar.checkbox("ℹ️ LSTM层数是什么？"):
-    st.sidebar.info("层数越多，特征提取能力越强，但训练更慢")
+    st.sidebar.info("堆叠的LSTM层数，层数越多特征提取越强")
 
-# ====================== Transformer 参数全部加解释 ======================
 st.sidebar.subheader("🤖 Transformer参数")
 trans_d_model = st.sidebar.slider("模型维度", min_value=32, max_value=256, value=128, step=32)
 if st.sidebar.checkbox("ℹ️ 模型维度是什么？"):
-    st.sidebar.info("""
-**模型维度 d_model**：特征向量的长度，控制模型表达能力。
-值越大，模型越强，但计算更慢。
-""")
+    st.sidebar.info("Transformer特征向量长度，控制模型表达能力")
 
 trans_heads = st.sidebar.slider("注意力头数", min_value=2, max_value=16, value=8, step=2)
 if st.sidebar.checkbox("ℹ️ 注意力头数是什么？"):
-    st.sidebar.info("""
-**注意力头数 nhead**：将特征分成多少组独立计算注意力。
-多头能捕捉不同类型的规律。
-""")
+    st.sidebar.info("多头注意力的分组数量，捕捉不同类型依赖关系")
 
 trans_layers = st.sidebar.slider("编码器层数", min_value=1, max_value=6, value=2)
 if st.sidebar.checkbox("ℹ️ 编码器层数是什么？"):
-    st.sidebar.info("""
-**编码器层数**：堆叠多少层 Transformer 块。
-层数越深，模型越复杂，训练越慢。
-""")
+    st.sidebar.info("Transformer编码器堆叠层数，越深模型越复杂")
 
-# ====================== ARIMA 参数全部加解释 ======================
 st.sidebar.subheader("📈 ARIMA参数")
 arma_p = st.sidebar.slider("AR阶数(p)", min_value=1, max_value=5, value=1)
 if st.sidebar.checkbox("ℹ️ AR阶数(p)是什么？"):
-    st.sidebar.info("""
-**AR(p) 自回归阶数**：用过去 p 天的数据直接预测当天。
-""")
+    st.sidebar.info("自回归阶数，使用过去p期数据进行预测")
 
 arma_d = st.sidebar.slider("差分阶数(d)", min_value=0, max_value=2, value=0)
 if st.sidebar.checkbox("ℹ️ 差分阶数(d)是什么？"):
-    st.sidebar.info("""
-**差分阶数 d**：对数据做几次差分使其平稳。
-股票通常 d=1 即可。
-""")
+    st.sidebar.info("使时间序列平稳所需的差分次数")
 
 arma_q = st.sidebar.slider("MA阶数(q)", min_value=1, max_value=5, value=1)
 if st.sidebar.checkbox("ℹ️ MA阶数(q)是什么？"):
-    st.sidebar.info("""
-**MA(q) 移动平均阶数**：用过去 q 天的误差修正预测。
-""")
+    st.sidebar.info("移动平均阶数，使用过去q期误差修正预测")
 
-# ====================== 训练参数全部加解释 ======================
 st.sidebar.subheader("⚡ 训练参数")
 epochs = st.sidebar.slider("训练轮数", min_value=10, max_value=200, value=15, step=5)
 if st.sidebar.checkbox("ℹ️ 训练轮数是什么？"):
-    st.sidebar.info("""
-**训练轮数 Epochs**：整个数据集被模型完整学习多少遍。
-轮数太少欠拟合，太多过拟合。
-""")
+    st.sidebar.info("整个数据集被模型完整学习的次数")
 
 batch_size = st.sidebar.slider("批次大小", min_value=8, max_value=128, value=64, step=8)
 if st.sidebar.checkbox("ℹ️ 批次大小是什么？"):
-    st.sidebar.info("""
-**批次大小 Batch Size**：每次训练用多少条数据。
-越大越稳定，越占显存。
-""")
+    st.sidebar.info("每次梯度更新使用的样本数量")
 
 learning_rate = st.sidebar.slider("学习率", min_value=0.0001, max_value=0.01, value=0.001, step=0.0001)
 if st.sidebar.checkbox("ℹ️ 学习率是什么？"):
-    st.sidebar.info("""
-**学习率 LR**：模型每次更新参数的步长。
-太大不收敛，太小训练太慢。
-""")
-
-# ======================================================================
+    st.sidebar.info("模型参数更新的步长，过大不收敛，过小训练慢")
 
 main_container = st.container()
 with main_container:
@@ -367,16 +326,16 @@ with main_container:
                 if use_bilstm:
                     current_model += 1
                     status_text.text(f"[{current_model}/{total_models}] 训练 BiLSTM 模型...")
-                    bilstm_model = BiLSTMModel(input_size=input_size, hidden_size=128, num_layers=1, output_size=1).to(device)
-                    bilstm_history = predictor.train_model('BiLSTM', bilstm_model, X_train, y_train, X_test, y_test, epochs=15, batch_size=128, lr=0.001, use_amp=True)
+                    bilstm_model = BiLSTMModel(input_size=input_size, hidden_size=bilstm_hidden, num_layers=bilstm_layers, output_size=1).to(device)
+                    bilstm_history = predictor.train_model('BiLSTM', bilstm_model, X_train, y_train, X_test, y_test, epochs=epochs, batch_size=batch_size, lr=learning_rate, use_amp=True)
                     all_results['BiLSTM'] = predictor.evaluate_model('BiLSTM', X_test, y_test)
                     progress_bar.progress(int(100 * current_model / total_models))
                 
                 if use_transformer:
                     current_model += 1
                     status_text.text(f"[{current_model}/{total_models}] 训练 Transformer 模型...")
-                    transformer_model = TransformerModel(input_size=input_size, d_model=64, nhead=4, num_layers=1, output_size=1).to(device)
-                    trans_history = predictor.train_model('Transformer', transformer_model, X_train, y_train, X_test, y_test, epochs=15, batch_size=128, lr=0.001, use_amp=True)
+                    transformer_model = TransformerModel(input_size=input_size, d_model=trans_d_model, nhead=trans_heads, num_layers=trans_layers, output_size=1).to(device)
+                    trans_history = predictor.train_model('Transformer', transformer_model, X_train, y_train, X_test, y_test, epochs=epochs, batch_size=batch_size, lr=learning_rate, use_amp=True)
                     all_results['Transformer'] = predictor.evaluate_model('Transformer', X_test, y_test)
                     progress_bar.progress(int(100 * current_model / total_models))
                 
@@ -470,7 +429,6 @@ with main_container:
                             fig_hist.update_layout(title=f"{model_name} 残差分布", xaxis_title="残差值", yaxis_title="概率密度", template='plotly_dark', height=300)
                             st.plotly_chart(fig_hist, use_container_width=True)
 
-# ====================== 项目报告（直接显示） ======================
                 st.divider()
                 st.header("📄 Project Report (Group Project)")
                 st.markdown("""
@@ -547,7 +505,6 @@ Our Personal Analysis: In this financial time series prediction task, we compare
 
 ✅ All project requirements are satisfied.
 """)
-# ==================================================================
 
                 st.header("💾 模型保存")
                 model_name = st.text_input("模型名称", f"stock_model_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}")
